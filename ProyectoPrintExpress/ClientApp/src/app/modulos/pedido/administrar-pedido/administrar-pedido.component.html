@@ -1,0 +1,69 @@
+<div class="col-md-10 offset-md-1 mt-5">
+    <div>
+        <div class="mb-3" style="text-align: center;">
+            <mat-card class="title-card">Administrar Pedido</mat-card>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef> N° </th>
+                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="descripcion">
+                <th mat-header-cell *matHeaderCellDef> Descripcion </th>
+                <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="monto">
+                <th mat-header-cell *matHeaderCellDef> Monto </th>
+                <td mat-cell *matCellDef="let element"> {{element.monto}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="cliente">
+                <th mat-header-cell *matHeaderCellDef> Nombre del Cliente </th>
+                <td mat-cell *matCellDef="let element"> {{element.nombreCliente}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef> Fecha de envío </th>
+                <td mat-cell *matCellDef="let element"> {{element.fechaEnvio | date:'shortDate' }} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="opciones" sticky>
+                <th mat-header-cell *matHeaderCellDef>Opciones</th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Desplegar" matTooltipPosition="right" mat-stroked-button color="accent">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu" xPosition="after">
+                        <button mat-menu-item (click)="editar(element)">
+                            <mat-icon color="accent" >edit</mat-icon>
+                            <span>Editar</span>
+                        </button>
+                        <button mat-menu-item>
+                            <mat-icon color="accent">picture_as_pdf</mat-icon>
+                            <span>PDF</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+    </div>
+</div>

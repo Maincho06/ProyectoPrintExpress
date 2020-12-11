@@ -1,0 +1,23 @@
+<div class="login-page">
+    <mat-card class="mat-elevation-z12">
+        <mat-card-title class="center">
+            Login
+        </mat-card-title>
+        <form>
+            <mat-card-content>
+                <mat-form-field>
+                    <input matInput placeholder="Email" name="email">
+                    <mat-icon color="primary" matSuffix>email</mat-icon>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Password" type="password" name="password">
+                    <mat-icon color="primary" matSuffix>lock</mat-icon>
+                </mat-form-field>
+            </mat-card-content>
+            <mat-checkbox color="primary">Recordarme</mat-checkbox>
+            <button mat-raised-button class="login-button" (click)="login()">
+                Ingresar
+            </button>
+        </form>
+    </mat-card>
+</div>

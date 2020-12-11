@@ -1,0 +1,8 @@
+p {
+    font-size: 25px;
+    font-weight: 400;
+}
+
+mat-form-field {
+    width: 100%;
+}

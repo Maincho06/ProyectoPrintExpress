@@ -1,0 +1,67 @@
+table {
+    width: 100%;
+}
+
+.title-card {
+    background-color: #3F51B5;
+    color: white;
+    font-size: 20px;
+}
+
+.example-container {
+    height: 400px;
+    max-width: 150%;
+    overflow: auto;
+}
+
+.clsColumnaMedium {
+    width: 400px;
+}
+
+.clsColumnaLib {
+    width: 150px;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+.mat-column-opciones {
+    flex: 0 0 50px;
+}
+
+.customWidthOpciones {
+    flex: 0 0 50px;
+}
+
+.mat-header-row {
+    background-color: #3F51B5;
+}
+
+.clsColumnaOpcion {
+    width: 160px;
+}
+
+.mat-header-row .mat-header-cell {
+    color: white;
+}
+
+:host /deep/ .mat-step-header .mat-step-icon-selected,
+:host /deep/ .mat-step-header .mat-step-icon {
+    background-color: rgb(236, 0, 140);
+}
+
+:host /deep/ .mat-step-header .mat-step-icon-state-error {
+    background-color: #3F51B5;
+}
+
+
+/* mat-checkbox {
+    background-color: #ff4081;
+} */
+
+::ng-deep.mat-checkbox-checked.mat-accent.mat-checkbox-disabled .mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: #ff4081 !important;
+}
