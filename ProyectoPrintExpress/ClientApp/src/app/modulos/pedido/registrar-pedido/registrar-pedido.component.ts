@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { PedidoService } from '../pedido.service';
 import { startWith, map } from 'rxjs/operators';
@@ -46,12 +46,12 @@ export class RegistrarPedidoComponent implements OnInit {
 
   crearFormulario(): void {
     this.form = this.fb.group({
-      'dni': [''],
-      'nombreCliente': [''],
-      'direccion': [''],
-      'monto': [],
-      'fechaEntrega': [],
-      'descripcion': []
+      'dni': ['', Validators.required],
+      'nombreCliente': ['', Validators.required],
+      'direccion': ['', Validators.required],
+      'monto': [, Validators.required],
+      'fechaEntrega': [, Validators.required],
+      'descripcion': [, Validators.required]
     });
   }
 
@@ -61,6 +61,11 @@ export class RegistrarPedidoComponent implements OnInit {
 
   async crearPedido() {
     let pedido: Pedido;
+    if (this.form.invalid) {
+      return Object.values(this.form.controls).forEach(control => {
+        control.markAllAsTouched();
+      })
+    }
     pedido = {
       descripcion: this.form.get('descripcion').value,
       monto: this.form.get('monto').value,
@@ -73,11 +78,23 @@ export class RegistrarPedidoComponent implements OnInit {
     };
     console.log('PEDIDO', pedido)
     await this.pedidoService.createPedido(pedido);
+    this.limpiarFormulario();
     Swal.fire({
       icon: 'success',
       title: 'El pedido se registró de manera exitosa',
       showConfirmButton: false,
       timer: 1500
+    })
+  }
+
+  limpiarFormulario() {
+    this.form.reset({
+      'dni': '',
+      'nombreCliente': '',
+      'direccion': '',
+      'monto': '',
+      'fechaEntrega': '',
+      'descripcion': ''
     })
   }
 
@@ -94,6 +111,31 @@ export class RegistrarPedidoComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  // Gets
+  get dniNoValido() {
+    return this.form.get('dni').invalid && this.form.get('dni').touched;
+  }
+
+  get nombreClienteNoValido() {
+    return this.form.get('nombreCliente').invalid && this.form.get('nombreCliente').touched;
+  }
+
+  get direccionNoValido() {
+    return this.form.get('direccion').invalid && this.form.get('direccion').touched;
+  }
+
+  get montoNoValido() {
+    return this.form.get('monto').invalid && this.form.get('monto').touched;
+  }
+
+  get fechaEntregaNoValido() {
+    return this.form.get('fechaEntrega').invalid && this.form.get('fechaEntrega').touched;
+  }
+
+  get descripcionEntregaNoValido() {
+    return this.form.get('descripcion').invalid && this.form.get('descripcion').touched;
   }
 
 }

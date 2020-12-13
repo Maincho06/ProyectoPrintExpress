@@ -25,7 +25,7 @@ import { EditarPedidoComponent } from './modulos/pedido/administrar-pedido/compo
     AdministrarPedidoComponent,
     RegistrarPedidoComponent,
     AdministrarAlmacenComponent,
-    EditarPedidoComponent
+    EditarPedidoComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { MatDialog, MatTableDataSource } from '@angular/material';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { EditarPedidoComponent } from './components/editar-pedido/editar-pedido.component';
 import { PedidoService } from '../pedido.service';
+import { FormGroup } from '@angular/forms';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -31,11 +32,13 @@ export class AdministrarPedidoComponent implements OnInit {
   dataSource: any;
   listaPedido: any;
 
+  @ViewChild(MatPaginator, { static: false}) paginator: MatPaginator;
   constructor(public dialog: MatDialog, private pedidoService: PedidoService, private cdRef: ChangeDetectorRef) { 
   }
 
   async ngOnInit() {
     this.listaPedido = await this.pedidoService.getAllPedido();
+    console.log(this.listaPedido);
     this.cargarLista(this.listaPedido);
     console.log(this.listaPedido);
   }
@@ -45,7 +48,7 @@ export class AdministrarPedidoComponent implements OnInit {
   cargarLista(lista) {
     this.dataSource = new MatTableDataSource(lista);
     this.cdRef.detectChanges();
-    // this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.paginator;
   }
 
   editar(data) {
@@ -56,7 +59,29 @@ export class AdministrarPedidoComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('GG',result );
+      if ( result ) {
+        const formulario = result as FormGroup;
+        const id = formulario.get('id').value ;
+        const descripcion = formulario.get('descripcion').value ;
+        const fechaEnvio = formulario.get('fechaEnvio').value ;
+        const monto = formulario.get('monto').value ;
+        const direccion = formulario.get('direccion').value ;
+        this.listaPedido.map( item => {
+          if(item.id === id ) {
+            item.descripcion = descripcion;
+            item.fechaEnvio = fechaEnvio;
+            item.monto = monto;
+            item.direccion = direccion;
+          }
+          return item;
+        })
+      }
     });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
 }

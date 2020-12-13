@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { CreatePedido } from '../../../models/pedido.model';
 import { PedidoService } from '../../../pedido.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-editar-pedido',
@@ -26,6 +27,7 @@ export class EditarPedidoComponent implements OnInit {
 
   crearFormulario() {
     this.form = this.fb.group({
+      'id': [''],
       'descripcion': [''],
       'monto': [''],
       'nombreCliente': [''],
@@ -41,6 +43,7 @@ export class EditarPedidoComponent implements OnInit {
     fechaEmision = new Date(data.fechaEmision);
     fechaEnvio = new Date(data.fechaEnvio);
     this.form.reset({
+      'id': data.id,
       'descripcion': data.descripcion,
       'monto': data.monto,
       'nombreCliente': data.nombreCliente,
@@ -57,12 +60,18 @@ export class EditarPedidoComponent implements OnInit {
       descripcion: this.form.get('descripcion').value,
       fechaEnvio: this.form.get('fechaEnvio').value,
       direccion: this.form.get('direccion').value,
-      monto: this.form.get('monto').value,
+      monto: parseInt(this.form.get('monto').value),
       pedidoId: this.data.id
     };
-    // console.log(pedido);
+    console.log('PEDIDO', pedido);
     const resp = await this.pedidoService.updatePedido(pedido);
-    this.dialogRef.close(this.form.value);
+    await Swal.fire({
+      icon: 'success',
+      title: 'El pedido se actualizó de manera exitosa',
+      showConfirmButton: false,
+      timer: 1500
+    })
+    this.dialogRef.close(this.form);
     console.log('RESP', resp);
   }
 

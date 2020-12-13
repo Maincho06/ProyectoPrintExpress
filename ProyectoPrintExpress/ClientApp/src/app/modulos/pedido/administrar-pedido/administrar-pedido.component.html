@@ -1,4 +1,4 @@
-<div class="col-md-10 offset-md-1 mt-5">
+<div class="col-md-10 offset-md-1 pt-5 pb-5">
     <div>
         <div class="mb-3" style="text-align: center;">
             <mat-card class="title-card">Administrar Pedido</mat-card>
@@ -6,6 +6,10 @@
     </div>
 
     <div class="mt-5">
+        <mat-form-field>
+            <mat-label>Buscar</mat-label>
+            <input matInput (keyup)="applyFilter($event)" #input>
+        </mat-form-field>
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
             <!--- Note that these columns can be defined in any order.
@@ -13,7 +17,7 @@
 
             <!-- Position Column -->
             <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef> N° </th>
+                <th mat-header-cell *matHeaderCellDef> ID </th>
                 <td mat-cell *matCellDef="let element"> {{element.id}} </td>
             </ng-container>
 
@@ -38,7 +42,7 @@
             <!-- Symbol Column -->
             <ng-container matColumnDef="fecha">
                 <th mat-header-cell *matHeaderCellDef> Fecha de envío </th>
-                <td mat-cell *matCellDef="let element"> {{element.fechaEnvio | date:'shortDate' }} </td>
+                <td mat-cell *matCellDef="let element"> {{element.fechaEnvio | date:'dd/MM/yyyy' }} </td>
             </ng-container>
 
             <!-- Symbol Column -->
@@ -55,7 +59,8 @@
                         </button>
                         <button mat-menu-item>
                             <mat-icon color="accent">picture_as_pdf</mat-icon>
-                            <span>PDF</span>
+                            <!-- <span>PDF</span> -->
+                            <a href="https://firebasestorage.googleapis.com/v0/b/gimnasio-51798.appspot.com/o/Sesi%C3%B3n%20Analisis-Dise%C3%B1o%20-%206%20Diagrama%20de%20Estados%20(4).pdf?alt=media&token=2cb86f39-48f3-478f-a77d-603c5304d20b" target="_blank">Contrato</a>
                         </button>
                     </mat-menu>
                 </td>
@@ -64,6 +69,8 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
     </div>
 </div>
