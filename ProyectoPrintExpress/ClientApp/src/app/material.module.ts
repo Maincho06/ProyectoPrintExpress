@@ -12,7 +12,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatListModule} from '@angular/material/list';
 import {MatTableModule} from '@angular/material/table';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material';
+import {MatNativeDateModule, MatTooltip, MatTooltipModule, MatStepperModule} from '@angular/material';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -35,7 +35,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatMenuModule,
     MatDialogModule,
     MatAutocompleteModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatTooltipModule,
+    MatStepperModule
   ],
   exports: [
     MatToolbarModule,
@@ -52,7 +54,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatMenuModule,
     MatDialogModule,
     MatAutocompleteModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatTooltipModule,
+    MatStepperModule
   ]
 })
 export class MaterialModule { }

@@ -1,64 +1,108 @@
-<div class="col-md-10 offset-md-1">
-    <div>
+<mat-horizontal-stepper [linear]="isLinear" #stepper>
+
+
+  <mat-step [stepControl]="firstFormGroup">
+    <div class="fab-container">
+      <button mat-mini-fab class="fab-toggler" (click)="onToggleFab(1, -1)">
+        <i class="material-icons" [@fabToggler]="{value: tsMain}">add</i>
+      </button>
+      <div [@speedDialStagger]="abMain.length">
+        <button *ngFor="let btn of abMain; let ibtn = index;" mat-mini-fab class="fab-secondary" color="secondary" (click)="clickFab(1, ibtn)" matStepperNext>
+          <i class="material-icons" matTooltip="{{btn.tool}}" matTooltipPosition="left">{{btn.icon}}</i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-10 offset-md-1">
+      <div>
         <div class="mb-3" style="text-align: center;">
-            <mat-card class="title-card">Administrar Pedido</mat-card>
+          <mat-card class="title-card">Administrar Pedido</mat-card>
         </div>
+      </div>
+      <form autocomplete="off" [formGroup]="form">
+        <div class="row">
+          <div class="col-lg-6 col-md-12 col-sm-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Descripción</mat-label>
+              <input matInput formControlName="descripcion">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6 col-md-12 col-sm-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre Cliente</mat-label>
+              <input matInput formControlName="nombreCliente" readonly>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Fecha de emisión</mat-label>
+              <input matInput formControlName="fechaEmision" readonly>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Fecha de envío</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="fechaEnvio">
+              <!-- <input matInput  formControlName="fechaEntrega"> -->
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <!-- <mat-form-field appearance="outline">
+                <mat-label>Fecha de envío</mat-label>
+
+            </mat-form-field> -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Dirección</mat-label>
+              <input matInput formControlName="direccion">
+            </mat-form-field>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Monto</mat-label>
+              <input matInput formControlName="monto">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
+              <ng-container matColumnDef="codigo">
+                <th mat-header-cell *matHeaderCellDef> Código </th>
+                <td mat-cell *matCellDef="let element"> {{element.codigo}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="descripcion">
+                <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="cantidad">
+                <th mat-header-cell *matHeaderCellDef> Cantidad </th>
+                <td mat-cell *matCellDef="let element"> {{element.cantidad}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+          </div>
+        </div>
+      </form>
     </div>
 
-    <form autocomplete="off" [formGroup]="form">
-        <div class="row">
-            <div class="col-lg-6 col-md-12 col-sm-12">
-                <mat-form-field appearance="outline">
-                    <mat-label>Descripción</mat-label>
-                    <input matInput formControlName="descripcion">
-                </mat-form-field>
-            </div>
-            <div class="col-lg-6 col-md-12 col-sm-12">
-                <mat-form-field appearance="outline">
-                    <mat-label>Nombre Cliente</mat-label>
-                    <input matInput formControlName="nombreCliente" readonly>
-                </mat-form-field>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <mat-form-field appearance="outline">
-                    <mat-label>Fecha de emisión</mat-label>
-                    <input matInput formControlName="fechaEmision" readonly>
-                </mat-form-field>
-            </div>
-            <div class="col-md-6 col-sm-12">
-                <mat-form-field appearance="outline">
-                    <mat-label>Fecha de envío</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="fechaEnvio">
-                    <!-- <input matInput  formControlName="fechaEntrega"> -->
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-                <!-- <mat-form-field appearance="outline">
-                    <mat-label>Fecha de envío</mat-label>
-                    
-                </mat-form-field> -->
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <mat-form-field appearance="outline">
-                    <mat-label>Dirección</mat-label>
-                    <input matInput formControlName="direccion">
-                </mat-form-field>
-            </div>
-            <div class="col-md-6 col-sm-12">
-                <mat-form-field appearance="outline">
-                    <mat-label>Monto</mat-label>
-                    <input matInput formControlName="monto">
-                </mat-form-field>
-            </div>
-        </div>
-    </form>
-</div>
+    <mat-dialog-actions align="center">
+      <button mat-raised-button color="primary" cdkFocusInitial (click)="editarProducto()"> Modificar </button>
+      <button mat-raised-button color="warn" mat-dialog-close> Salir </button>
+    </mat-dialog-actions>
 
-<mat-dialog-actions align="center">
-    <button mat-raised-button color="primary" cdkFocusInitial (click)="editarProducto()"> Modificar </button>
-    <button mat-raised-button color="warn" mat-dialog-close> Salir </button>
-</mat-dialog-actions>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup" label="Fill out your address">
+    <button mat-button matStepperPrevious class="back-button"><mat-icon>keyboard_arrow_left</mat-icon></button>
+
+  </mat-step>
+</mat-horizontal-stepper>

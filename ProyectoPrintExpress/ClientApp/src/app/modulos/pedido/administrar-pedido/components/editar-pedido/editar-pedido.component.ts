@@ -1,12 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { CreatePedido } from '../../../models/pedido.model';
 import { PedidoService } from '../../../pedido.service';
 import Swal from 'sweetalert2';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter'
 import {DateAdapter, MAT_DATE_FORMATS} from '@angular/material/core';
 import { MAT_DATE_LOCALE } from '@angular/material';
+import { informepAnimations } from '../../../../shared/animations/fabtoggler';
 
 
 export const MY_FORMATS = {
@@ -20,6 +21,17 @@ export const MY_FORMATS = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 }
+export interface PeriodicElement {
+  codigo: number;
+  descripcion: string;
+  cantidad: number;
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [
+  { codigo: 1, descripcion: 'Madera', cantidad: 2 },
+  { codigo: 2, descripcion: 'Vidrio', cantidad: 3 },
+  { codigo: 3, descripcion: 'Metal', cantidad: 4 },
+];
 
 @Component({
   selector: 'app-editar-pedido',
@@ -31,22 +43,46 @@ export const MY_FORMATS = {
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE,MAT_MOMENT_DATE_ADAPTER_OPTIONS]
     },
-    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS}
-  ]
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+  ],
+  animations: [informepAnimations]
 })
 export class EditarPedidoComponent implements OnInit {
 
   form: FormGroup;
-  
+
+  // Fab
+  fbMain = [
+    { icon: 'add_task', tool: 'Agregar Materiales' }
+  ];
+  abMain = [];
+  tsMain = 'inactive';
+
+  fbView = [
+    { icon: 'add', tool: 'Nuevo informe' },
+    { icon: 'cancel', tool: 'Cancelar' }
+  ];
+  abView = [];
+  tsView = 'inactive';
+
+  displayedColumns: string[] = ['codigo', 'descripcion', 'cantidad']
+  dataSource = ELEMENT_DATA
+
   constructor(private pedidoService: PedidoService,
     private fb: FormBuilder,
+
+   
+
     public dialogRef: MatDialogRef<EditarPedidoComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { 
     console.log('DATA', this.data);
     this.crearFormulario();
     this.llenarFormulario(this.data);
   }
 
+
+
   ngOnInit() {
+
   }
 
   crearFormulario() {
@@ -59,6 +95,21 @@ export class EditarPedidoComponent implements OnInit {
       'fechaEnvio': [''],
       'direccion': [''],
     });
+  }
+
+  onToggleFab(fab: number, stat: number) {
+    switch (fab) {
+      case 1:
+        stat = (stat === -1) ? (this.abMain.length > 0) ? 0 : 1 : stat;
+        this.tsMain = (stat === 0) ? 'inactive' : 'active';
+        this.abMain = (stat === 0) ? [] : this.fbMain;
+        break;
+      case 2:
+        stat = (stat === -1) ? (this.abView.length > 0) ? 0 : 1 : stat;
+        this.tsView = (stat === 0) ? 'inactive' : 'active';
+        this.abView = (stat === 0) ? [] : this.fbView;
+        break;
+    }
   }
 
   llenarFormulario(data) {

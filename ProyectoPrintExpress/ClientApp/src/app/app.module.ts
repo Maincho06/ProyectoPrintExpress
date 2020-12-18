@@ -31,10 +31,10 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
+    BrowserAnimationsModule,
     FormsModule,
     MaterialModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
     ReactiveFormsModule,
     NgxSpinnerModule
   ],
