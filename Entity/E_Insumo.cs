@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Entity
 {
-    class E_Insumo
+    public class E_Insumo
     {
     }
 }
