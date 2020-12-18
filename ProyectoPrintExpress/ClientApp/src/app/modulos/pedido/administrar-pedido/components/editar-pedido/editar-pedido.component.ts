@@ -150,4 +150,13 @@ export class EditarPedidoComponent implements OnInit {
     console.log('RESP', resp);
   }
 
+
+  clickFab(opc: number, index: number) {
+    switch (opc) {
+      case 1:
+        break;
+      case 2:
+        break;
+    }
+  }
 }
