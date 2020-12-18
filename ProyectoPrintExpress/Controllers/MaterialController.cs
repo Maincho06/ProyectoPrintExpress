@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Business;
+using Entity;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,11 +14,13 @@ namespace ProyectoPrintExpress.Controllers
     [ApiController]
     public class MaterialController : ControllerBase
     {
+        MaterialB material = new MaterialB();
+
         // GET: api/<MaterialController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Material> Get()
         {
-            return new string[] { "value1", "value2" };
+            return material.getAllMaterial();
         }
 
         // GET api/<MaterialController>/5
