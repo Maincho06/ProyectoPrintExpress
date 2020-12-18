@@ -44,6 +44,13 @@ namespace ProyectoPrintExpress.Controllers
             return pedido.createPedido(value);
         }
 
+        [HttpPut]
+        [Route("UpdateEstadoPedido")]
+        public int UpdateEstadoPedido([FromBody] UpdateEstadoPedido value)
+        {
+            return pedido.updateEstadoPedido(value);
+        }
+
         // DELETE api/<PedidoController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)

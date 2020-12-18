@@ -3,6 +3,9 @@ import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { EditarPedidoComponent } from './components/editar-pedido/editar-pedido.component';
 import { PedidoService } from '../pedido.service';
 import { FormGroup } from '@angular/forms';
+import Swal from 'sweetalert2';
+import { UpdateEstadoPedido } from '../models/pedido.model';
+import { NgxSpinnerService } from 'ngx-spinner';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -33,21 +36,23 @@ export class AdministrarPedidoComponent implements OnInit {
   listaPedido: any;
 
   @ViewChild(MatPaginator, { static: false}) paginator: MatPaginator;
-  constructor(public dialog: MatDialog, private pedidoService: PedidoService, private cdRef: ChangeDetectorRef) { 
+  constructor(public dialog: MatDialog, private pedidoService: PedidoService, private cdRef: ChangeDetectorRef, private spinner: NgxSpinnerService) { 
   }
 
   async ngOnInit() {
+    this.spinner.show();
     this.listaPedido = await this.pedidoService.getAllPedido();
     console.log(this.listaPedido);
     this.cargarLista(this.listaPedido);
     console.log(this.listaPedido);
+    this.spinner.hide();
   }
 
 
 
   cargarLista(lista) {
     this.dataSource = new MatTableDataSource(lista);
-    this.cdRef.detectChanges();
+    // this.cdRef.detectChanges();
     this.dataSource.paginator = this.paginator;
   }
 
@@ -77,6 +82,37 @@ export class AdministrarPedidoComponent implements OnInit {
         })
       }
     });
+  }
+
+  async eliminarPedido(data) {
+    await Swal.fire({
+      title: '¿Está seguro?',
+      text: "Usted cancelará este pedido",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, cancelarlo'
+    }).then(async (result) => {
+      let pedido: UpdateEstadoPedido;
+      pedido = {
+        estadoPedido: 2,
+        pedidoId: data.id
+      }
+      if(result.isConfirmed) {
+        await this.pedidoService.updateEstadoPedido(pedido)
+        this.listaPedido = this.listaPedido.filter(item => item.id !== data.id);
+        this.cargarLista(this.listaPedido);
+        if (result.isConfirmed) {
+          Swal.fire(
+            'El pedido fue cancelado',
+            '',
+            'success'
+          )
+        }
+      }
+      
+    })
   }
 
   applyFilter(event: Event) {

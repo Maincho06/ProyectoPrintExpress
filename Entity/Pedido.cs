@@ -37,4 +37,10 @@ namespace Entity
         public string direccion { get; set; }
         public float monto { get; set; }
     }
+
+    public class UpdateEstadoPedido
+    {
+        public int estadoPedido { get; set; }
+        public int pedidoId { get; set; }
+    }
 }

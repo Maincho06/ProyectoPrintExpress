@@ -4,11 +4,35 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { CreatePedido } from '../../../models/pedido.model';
 import { PedidoService } from '../../../pedido.service';
 import Swal from 'sweetalert2';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter'
+import {DateAdapter, MAT_DATE_FORMATS} from '@angular/material/core';
+import { MAT_DATE_LOCALE } from '@angular/material';
+
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+}
 
 @Component({
   selector: 'app-editar-pedido',
   templateUrl: './editar-pedido.component.html',
-  styleUrls: ['./editar-pedido.component.css']
+  styleUrls: ['./editar-pedido.component.css'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE,MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS}
+  ]
 })
 export class EditarPedidoComponent implements OnInit {
 

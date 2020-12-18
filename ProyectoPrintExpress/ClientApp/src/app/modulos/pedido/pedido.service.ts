@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Pedido, CreatePedido } from './models/pedido.model';
+import { Pedido, CreatePedido, UpdateEstadoPedido } from './models/pedido.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +29,11 @@ export class PedidoService{
 
   updatePedido(pedido: CreatePedido) {
     const url = this.myUrl;
+    return this.http.put(url, pedido).toPromise();
+  }
+
+  updateEstadoPedido(pedido: UpdateEstadoPedido) {
+    const url = this.myUrl + 'UpdateEstadoPedido';
     return this.http.put(url, pedido).toPromise();
   }
 

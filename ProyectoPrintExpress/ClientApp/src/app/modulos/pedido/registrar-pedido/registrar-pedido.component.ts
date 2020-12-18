@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentChecked, Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { PedidoService } from '../pedido.service';
@@ -6,6 +6,11 @@ import { startWith, map } from 'rxjs/operators';
 import { ClienteService } from '../../cliente/cliente.service';
 import { Pedido } from '../models/pedido.model';
 import Swal from 'sweetalert2';
+import * as _moment from 'moment';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter'
+import {DateAdapter, MAT_DATE_FORMATS} from '@angular/material/core';
+import { MAT_DATE_LOCALE } from '@angular/material';
+
 
 interface Cliente {
   id: number;
@@ -16,17 +21,41 @@ interface Cliente {
   telefono: string;
 }
 
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+}
+
 @Component({
   selector: 'app-registrar-pedido',
   templateUrl: './registrar-pedido.component.html',
-  styleUrls: ['./registrar-pedido.component.css']
+  styleUrls: ['./registrar-pedido.component.css'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE,MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS}
+  ]
 })
-export class RegistrarPedidoComponent implements OnInit {
+export class RegistrarPedidoComponent implements OnInit, AfterContentChecked {
 
   form: FormGroup;
   listaCliente: any;
   filterCliente: Observable<Cliente[]>;
-  constructor(private fb: FormBuilder, private clienteService: ClienteService, private pedidoService: PedidoService) { }
+  existCliente = false;
+  constructor(private cdRef : ChangeDetectorRef, private fb: FormBuilder, private clienteService: ClienteService, private pedidoService: PedidoService) { }
+  ngAfterContentChecked(): void {
+    this.cdRef.detectChanges();
+  }
 
   async ngOnInit() {
     this.crearFormulario();
@@ -104,9 +133,15 @@ export class RegistrarPedidoComponent implements OnInit {
       const listaTemp = this.listaCliente.filter(option => option.dni === dni);
       if ( listaTemp.length === 0) {
         this.limpiarCliente();
+        if(!this.existCliente){
+          this.existCliente = true;
+        }
         return true;
       } else {
         this.form.controls.nombreCliente.setValue(`${listaTemp[0].nombre} ${listaTemp[0].apellido}`  );
+        if(this.existCliente){
+          this.existCliente = false;
+        }
         return false;
       }
     }

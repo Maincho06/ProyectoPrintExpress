@@ -16,3 +16,9 @@ export class CreatePedido {
     monto: number;
     pedidoId: number;
 }
+
+export class UpdateEstadoPedido 
+{
+    estadoPedido: number;
+    pedidoId: number;
+}

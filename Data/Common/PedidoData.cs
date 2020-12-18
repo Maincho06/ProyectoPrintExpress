@@ -104,5 +104,28 @@ namespace Data.Common
             }
         }
 
+        public int updateEstadoPedido(UpdateEstadoPedido pedido)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("spUpdateEstadoPedido", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@estadoId", pedido.estadoPedido);
+                    cmd.Parameters.AddWithValue("@pedidoId", pedido.pedidoId);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                return 1;
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+        }
+
     }
 }

@@ -24,5 +24,10 @@ namespace Business
         {
             return pedidoData.updatePedido(pedido);
         }
+
+        public int updateEstadoPedido(UpdateEstadoPedido pedido)
+        {
+            return pedidoData.updateEstadoPedido(pedido);
+        }
     }
 }

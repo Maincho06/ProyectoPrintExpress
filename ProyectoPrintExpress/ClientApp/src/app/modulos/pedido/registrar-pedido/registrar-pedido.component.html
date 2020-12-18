@@ -1,6 +1,15 @@
 <div>
     <div class="container mt-5">
-        <h3 class="mb-4">Registrar Pedido</h3>
+        <div class="row">
+            <div class="col-lg-10 col-md-10">
+                <h3 class="mb-4">Registrar Pedido</h3>
+            </div>
+            <div *ngIf="existCliente == true" class="col-lg-2 col-md-2">
+                <button mat-raised-button color="primary">Crear Cliente</button>
+            </div>
+        </div>
+
+
         <form autocomplete="off" [formGroup]="form">
             <div>
                 <h5>Cliente</h5>
@@ -47,9 +56,9 @@
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Fecha de entrega</mat-label>
-                            <input matInput [matDatepicker]="picker" formControlName="fechaEntrega">
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
+                            <input matInput [matDatepicker]="dp" formControlName="fechaEntrega">
+                            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                            <mat-datepicker #dp></mat-datepicker>
                         </mat-form-field>
                         <small *ngIf="fechaEntregaNoValido" class="text-danger">El campo es obligatorio</small>
                     </div>
