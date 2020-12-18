@@ -18,7 +18,7 @@ namespace Data.Common
                 List<MaterialPedidoId> lpedido = new List<MaterialPedidoId>();
                 using (SqlConnection con = new SqlConnection(connectionString))
                 {
-                    SqlCommand cmd = new SqlCommand("spGetAllPedido", con);
+                    SqlCommand cmd = new SqlCommand("spGetAllMaterialPedidoId", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@pedidoId", pedidoId);
                     con.Open();

@@ -6,6 +6,8 @@ import { FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { UpdateEstadoPedido } from '../models/pedido.model';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MaterialService } from '../../material/material.service';
+import { MaterialpedidoService } from '../../material/materialpedido.service';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -34,14 +36,23 @@ export class AdministrarPedidoComponent implements OnInit {
   displayedColumns: string[] = ['id', 'descripcion', 'monto', 'cliente', 'fecha', 'opciones'];
   dataSource: any;
   listaPedido: any;
-
+  listaMaterial: any;
+  listaMaterialPedido: any;
   @ViewChild(MatPaginator, { static: false}) paginator: MatPaginator;
-  constructor(public dialog: MatDialog, private pedidoService: PedidoService, private cdRef: ChangeDetectorRef, private spinner: NgxSpinnerService) { 
+  constructor(public dialog: MatDialog, 
+    private pedidoService: PedidoService, 
+    private cdRef: ChangeDetectorRef, 
+    private spinner: NgxSpinnerService, 
+    private materialService: MaterialService,
+    private materialPedidoService: MaterialpedidoService) { 
   }
 
   async ngOnInit() {
     this.spinner.show();
     this.listaPedido = await this.pedidoService.getAllPedido();
+    this.listaMaterial = await this.materialService.getAllMaterial();
+    this.listaMaterialPedido = await this.materialPedidoService.getMaterialPedidoId(22);
+    console.log('MATERIAL',this.listaMaterial);
     console.log(this.listaPedido);
     this.cargarLista(this.listaPedido);
     console.log(this.listaPedido);

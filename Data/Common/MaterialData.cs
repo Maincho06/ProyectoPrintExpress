@@ -27,7 +27,7 @@ namespace Data.Common
                     {
                         Material material = new Material();
                         material.id = Convert.ToInt32(reader["insumoId"]);
-                        material.codigo = reader["pedidoDescripcion"].ToString();
+                        material.codigo = reader["insumoCodigo"].ToString();
                         material.nombre = reader["insumoNombre"].ToString();
                         material.unidadMedida = reader["insumoUnidadMedida"].ToString();
                         material.precioUnitario = double.Parse(reader["insumoPrecioUnitario"].ToString());
