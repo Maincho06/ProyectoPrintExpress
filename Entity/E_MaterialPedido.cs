@@ -13,10 +13,11 @@ namespace Entity
 
     public class MaterialPedidoId
     {
-        public int pedidoId { get; set; }
-        public int materialCodigo { get; set; }
-        public int materialNombre { get; set; }
-        public int materialCantidad { get; set; }
+        public string codigo { get; set; }
+        public string nombre { get; set; }
+        public int cantidad { get; set; }
+        public int materialId { get; set; }
+        public double precioUnitario { get; set; }
     }
 
     public class CreateMaterialPedido
@@ -24,6 +25,12 @@ namespace Entity
         public int pedidoId { get; set; }
         public int insumoId { get; set; }
         public int cantidad { get; set; }
+    }
+
+    public class DeleteMaterialPedido
+    {
+        public int pedidoId { get; set; }
+        public int materialId { get; set; }
     }
 
 }

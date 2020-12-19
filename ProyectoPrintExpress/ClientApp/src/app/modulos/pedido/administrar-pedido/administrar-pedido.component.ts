@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
-import { EditarPedidoComponent } from './components/editar-pedido/editar-pedido.component';
+import { EditarPedidoComponent, Estado } from './components/editar-pedido/editar-pedido.component';
 import { PedidoService } from '../pedido.service';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { UpdateEstadoPedido } from '../models/pedido.model';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -33,30 +33,65 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./administrar-pedido.component.css']
 })
 export class AdministrarPedidoComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'descripcion', 'monto', 'cliente', 'fecha', 'opciones'];
+  listaEstado: Estado[] = [
+    {estadoPedidoId: 1, estadoPedidoNombre: 'Cotizado'},
+    {estadoPedidoId: 2, estadoPedidoNombre: 'Cancelado'},
+    {estadoPedidoId: 1004, estadoPedidoNombre: 'Pago Completo'},
+    {estadoPedidoId: 1005, estadoPedidoNombre: 'Finalizado'},
+    {estadoPedidoId: 1006, estadoPedidoNombre: 'Distribución'},
+    {estadoPedidoId: 1007, estadoPedidoNombre: 'Entregado'},
+  ]
+  displayedColumns: string[] = ['id', 'descripcion', 'monto', 'cliente','estado','fecha', 'opciones'];
   dataSource: any;
   listaPedido: any;
+  listaPedidoFija: any;
   listaMaterial: any;
   listaMaterialPedido: any;
+  form: FormGroup;
   @ViewChild(MatPaginator, { static: false}) paginator: MatPaginator;
-  constructor(public dialog: MatDialog, 
+  constructor(
+    public fb:FormBuilder,
+    public dialog: MatDialog, 
     private pedidoService: PedidoService, 
     private cdRef: ChangeDetectorRef, 
     private spinner: NgxSpinnerService, 
     private materialService: MaterialService,
     private materialPedidoService: MaterialpedidoService) { 
+      this.crearFormulario();
+      this.llenarFormulario();
   }
 
   async ngOnInit() {
     this.spinner.show();
     this.listaPedido = await this.pedidoService.getAllPedido();
-    this.listaMaterial = await this.materialService.getAllMaterial();
-    this.listaMaterialPedido = await this.materialPedidoService.getMaterialPedidoId(22);
+    this.listaPedidoFija = await this.pedidoService.getAllPedido();
+    
     console.log('MATERIAL',this.listaMaterial);
     console.log(this.listaPedido);
     this.cargarLista(this.listaPedido);
     console.log(this.listaPedido);
+    this.cambioTipo('Cotizado');
     this.spinner.hide();
+  }
+
+  crearFormulario() {
+    this.form = this.fb.group({
+      'tipo': ['']
+    });
+  }
+
+  llenarFormulario() {
+    this.form.reset({
+      tipo: 'Cotizado'
+    })
+  }
+
+
+  cambioTipo(event) {
+    console.log(event);
+    let listaTemp = [];
+    listaTemp = this.listaPedido.filter(item => item.estadoNombre === event);
+    this.cargarLista(listaTemp);
   }
 
 
@@ -69,25 +104,31 @@ export class AdministrarPedidoComponent implements OnInit {
 
   editar(data) {
     const dialogRef = this.dialog.open(EditarPedidoComponent, {
-      width: '90%',
-      height: '90%',
+      width: '98%',
+      height: '98%',
       data: data
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('GG',result );
       if ( result ) {
+        console.log('RESULT',result);
         const formulario = result as FormGroup;
         const id = formulario.get('id').value ;
         const descripcion = formulario.get('descripcion').value ;
         const fechaEnvio = formulario.get('fechaEnvio').value ;
         const monto = formulario.get('monto').value ;
         const direccion = formulario.get('direccion').value ;
+        const estadoId = formulario.get('estadoId').value;
+        console.log('ESTADOID',estadoId);
+        const estado = this.listaEstado.filter(item => item.estadoPedidoId === estadoId)[0];
+        console.log('ESTADO',estado);
         this.listaPedido.map( item => {
           if(item.id === id ) {
             item.descripcion = descripcion;
             item.fechaEnvio = fechaEnvio;
             item.monto = monto;
             item.direccion = direccion;
+            item.estadoNombre = estado.estadoPedidoNombre;
           }
           return item;
         })

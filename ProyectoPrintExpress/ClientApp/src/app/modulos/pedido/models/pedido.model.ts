@@ -15,10 +15,16 @@ export class CreatePedido {
     direccion: string;
     monto: number;
     pedidoId: number;
+    estadoId: number;
 }
 
 export class UpdateEstadoPedido 
 {
     estadoPedido: number;
     pedidoId: number;
+}
+
+export class DeleteMaterialPedido{
+    pedidoId: number;
+    materialId: number;
 }

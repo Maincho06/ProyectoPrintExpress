@@ -33,6 +33,8 @@ namespace Data.Common
                         pedido.fechaEmision = Convert.ToDateTime(reader["pedidoFechaEmision"]);
                         pedido.fechaEnvio = Convert.ToDateTime(reader["pedidoFechaEnvio"]);
                         pedido.direccion = reader["pedidoDireccion"].ToString();
+                        pedido.estadoId = Convert.ToInt32(reader["estadoPedidoId"]);
+                        pedido.estadoNombre = reader["estadoPedidoNombre"].ToString();
                         pedido.nombreCliente = reader["nombreCliente"].ToString();
                         lpedido.Add(pedido);
                     }
@@ -91,6 +93,7 @@ namespace Data.Common
                     cmd.Parameters.AddWithValue("@direccion", pedido.direccion);
                     cmd.Parameters.AddWithValue("@monto", pedido.monto);
                     cmd.Parameters.AddWithValue("@pedidoId", pedido.pedidoId);
+                    cmd.Parameters.AddWithValue("@estadoId", pedido.estadoId);
                     con.Open();
                     cmd.ExecuteNonQuery();
                     con.Close();

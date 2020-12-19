@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DeleteMaterialPedido } from '../pedido/models/pedido.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,14 +17,30 @@ export class MaterialpedidoService {
     return this.http.get(url).toPromise();
   }
 
-  getCreateMaterialPedido({pedidoId, materialId, cantidad}){
+  createMaterialPedido({pedidoId, materialId, cantidad}){
     const url = this.myUrl;
     const body = {
       'pedidoId': pedidoId,
       'insumoId': materialId,
       'cantidad': cantidad
     };
-    return this.http.post(url,body);
+    console.log('body',body);
+    return this.http.post(url,body).toPromise();
+  }
+
+  deleteMaterialPedido({pedidoId, materialId}) {
+    const url = this.myUrl + '/DeleteMaterialPedido';
+    // const url = this.myUrl + '/' + 1;
+    let body: DeleteMaterialPedido;
+    body = {
+      "pedidoId": pedidoId,
+      "materialId": materialId
+    };
+    console.log('body',body);
+    // return this.http.post(url,body).toPromise();
+    return this.http.post(url,body, {headers: {
+      'Content-Type': 'application/json'
+    } }).toPromise();
   }
 
 }

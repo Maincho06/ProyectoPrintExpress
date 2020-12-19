@@ -14,6 +14,8 @@ namespace Entity
         public DateTime fechaEnvio { get; set; }
         public string direccion { get; set; }
         public string nombreCliente { get; set; }
+        public int estadoId { get; set; }
+        public string estadoNombre { get; set; }
     }
 
     public class CreatePedido
@@ -36,6 +38,7 @@ namespace Entity
         public DateTime fechaEnvio { get; set; }
         public string direccion { get; set; }
         public float monto { get; set; }
+        public int estadoId { get; set; }
     }
 
     public class UpdateEstadoPedido

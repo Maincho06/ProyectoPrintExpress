@@ -10,6 +10,7 @@ import * as _moment from 'moment';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter'
 import {DateAdapter, MAT_DATE_FORMATS} from '@angular/material/core';
 import { MAT_DATE_LOCALE } from '@angular/material';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 interface Cliente {
@@ -52,12 +53,14 @@ export class RegistrarPedidoComponent implements OnInit, AfterContentChecked {
   listaCliente: any;
   filterCliente: Observable<Cliente[]>;
   existCliente = false;
-  constructor(private cdRef : ChangeDetectorRef, private fb: FormBuilder, private clienteService: ClienteService, private pedidoService: PedidoService) { }
+  constructor(private spinner: NgxSpinnerService,
+    private cdRef : ChangeDetectorRef, private fb: FormBuilder, private clienteService: ClienteService, private pedidoService: PedidoService) { }
   ngAfterContentChecked(): void {
     this.cdRef.detectChanges();
   }
 
   async ngOnInit() {
+    this.spinner.show();
     this.crearFormulario();
     this.listaCliente = await this.clienteService.getAllCliente();
     this.filterCliente = this.form.controls['dni'].valueChanges.pipe(
@@ -65,6 +68,7 @@ export class RegistrarPedidoComponent implements OnInit, AfterContentChecked {
       map(value => typeof value === 'string' ? value : value.dni),
       map(dni => dni ? this._filterCliente(dni) : this.listaCliente.slice() )
     );
+    this.spinner.hide();
     console.log(this.listaCliente);
   }
 
@@ -78,7 +82,7 @@ export class RegistrarPedidoComponent implements OnInit, AfterContentChecked {
       'dni': ['', Validators.required],
       'nombreCliente': ['', Validators.required],
       'direccion': ['', Validators.required],
-      'monto': [, Validators.required],
+      'monto': [, [Validators.required,Validators.min(0)]],
       'fechaEntrega': [, Validators.required],
       'descripcion': [, Validators.required]
     });

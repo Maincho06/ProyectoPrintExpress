@@ -48,9 +48,10 @@
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Monto</mat-label>
-                            <input type="number" matInput placeholder="10" formControlName="monto">
+                            <span matPrefix>S/ &nbsp;</span>
+                            <input type="number" matInput placeholder="10" formControlName="monto" min="1">
                         </mat-form-field>
-                        <small *ngIf="montoNoValido" class="text-danger">El campo es obligatorio</small>
+                        <small *ngIf="montoNoValido" class="text-danger">El campo es obligatorio y tiene que ser mayor a 1</small>
                     </div>
 
                     <div class="col-md-3">

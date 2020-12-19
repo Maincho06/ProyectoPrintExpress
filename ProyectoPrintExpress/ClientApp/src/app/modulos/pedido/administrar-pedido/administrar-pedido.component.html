@@ -1,81 +1,107 @@
 <ngx-spinner></ngx-spinner>
-<div class="col-md-10 offset-md-1 pt-5 pb-5">
-    <div>
-        <div class="mb-3" style="text-align: center;">
-            <mat-card class="title-card">Administrar Pedido</mat-card>
+<form autocomplete="off" [formGroup]="form">
+    <div class="col-md-10 offset-md-1 pt-5 pb-5">
+        <div>
+            <div class="mb-3" style="text-align: center;">
+                <mat-card class="title-card">Administrar Pedido</mat-card>
+            </div>
         </div>
-    </div>
 
-    <div class="mt-5">
-        <mat-form-field>
-            <mat-label>Buscar</mat-label>
-            <input matInput (keyup)="applyFilter($event)" #input>
-        </mat-form-field>
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <div class="mt-5">
 
-            <!--- Note that these columns can be defined in any order.
+            <div class="row">
+                <div class="col-lg-8">
+                    <mat-form-field>
+                        <mat-label>Buscar</mat-label>
+                        <input matInput (keyup)="applyFilter($event)" #input>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Estado</mat-label>
+                        <!-- <span matPrefix>S/ &nbsp;</span>
+                        <input matInput formControlName="monto"> -->
+                        <mat-select formControlName="tipo" (selectionChange)="cambioTipo($event.value)">
+                            <mat-option *ngFor="let food of listaEstado" [value]="food.estadoPedidoNombre">
+                                {{food.estadoPedidoNombre}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                <!--- Note that these columns can be defined in any order.
                   The actual rendered columns are set as a property on the row definition" -->
 
-            <!-- Position Column -->
-            <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef> ID </th>
-                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-            </ng-container>
+                <!-- Position Column -->
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef> ID </th>
+                    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                </ng-container>
 
-            <!-- Name Column -->
-            <ng-container matColumnDef="descripcion">
-                <th mat-header-cell *matHeaderCellDef> Descripcion </th>
-                <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
-            </ng-container>
+                <!-- Name Column -->
+                <ng-container matColumnDef="descripcion">
+                    <th mat-header-cell *matHeaderCellDef> Descripcion </th>
+                    <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+                </ng-container>
 
-            <!-- Weight Column -->
-            <ng-container matColumnDef="monto">
-                <th mat-header-cell *matHeaderCellDef> Monto </th>
-                <td mat-cell *matCellDef="let element"> {{element.monto}} </td>
-            </ng-container>
+                <!-- Weight Column -->
+                <ng-container matColumnDef="monto">
+                    <th mat-header-cell *matHeaderCellDef> Monto </th>
+                    <td mat-cell *matCellDef="let element"> {{element.monto}} </td>
+                </ng-container>
 
-            <!-- Symbol Column -->
-            <ng-container matColumnDef="cliente">
-                <th mat-header-cell *matHeaderCellDef> Nombre del Cliente </th>
-                <td mat-cell *matCellDef="let element"> {{element.nombreCliente}} </td>
-            </ng-container>
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="cliente">
+                    <th mat-header-cell *matHeaderCellDef> Nombre del Cliente </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nombreCliente}} </td>
+                </ng-container>
+                <ng-container matColumnDef="estado">
+                    <th mat-header-cell *matHeaderCellDef> Estado </th>
+                    <td mat-cell *matCellDef="let element"> {{element.estadoNombre}} </td>
+                </ng-container>
 
-            <!-- Symbol Column -->
-            <ng-container matColumnDef="fecha">
-                <th mat-header-cell *matHeaderCellDef> Fecha de envío </th>
-                <td mat-cell *matCellDef="let element"> {{element.fechaEnvio | date:'dd/MM/yyyy' }} </td>
-            </ng-container>
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="fecha">
+                    <th mat-header-cell *matHeaderCellDef> Fecha de envío </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fechaEnvio | date:'dd/MM/yyyy' }} </td>
+                </ng-container>
 
-            <!-- Symbol Column -->
-            <ng-container matColumnDef="opciones" sticky>
-                <th mat-header-cell *matHeaderCellDef>Opciones</th>
-                <td mat-cell *matCellDef="let element">
-                    <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Desplegar" matTooltipPosition="right" mat-stroked-button color="accent">
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="opciones" sticky>
+                    <th mat-header-cell *matHeaderCellDef>Opciones</th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Desplegar" matTooltipPosition="right" mat-stroked-button color="accent">
                         <mat-icon>more_vert</mat-icon>
                     </button>
-                    <mat-menu #menu="matMenu" xPosition="after">
-                        <button mat-menu-item (click)="editar(element)">
+                        <mat-menu #menu="matMenu" xPosition="after">
+                            <button mat-menu-item (click)="editar(element)">
                             <mat-icon color="accent" >edit</mat-icon>
                             <span>Editar</span>
                         </button>
-                        <button mat-menu-item (click)="eliminarPedido(element)">
+                            <button mat-menu-item (click)="eliminarPedido(element)">
                             <mat-icon color="accent" >cancel</mat-icon>
                             <span>Eliminar</span>
                         </button>
-                        <button mat-menu-item>
+                            <button mat-menu-item>
                             <mat-icon color="accent">picture_as_pdf</mat-icon>
                             <!-- <span>PDF</span> -->
                             <a href="https://firebasestorage.googleapis.com/v0/b/gimnasio-51798.appspot.com/o/Sesi%C3%B3n%20Analisis-Dise%C3%B1o%20-%206%20Diagrama%20de%20Estados%20(4).pdf?alt=media&token=2cb86f39-48f3-478f-a77d-603c5304d20b" target="_blank">Contrato</a>
                         </button>
-                    </mat-menu>
-                </td>
-            </ng-container>
+                        </mat-menu>
+                    </td>
+                </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
 
-        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
+        </div>
     </div>
-</div>
+</form>

@@ -45,9 +45,11 @@ namespace ProyectoPrintExpress.Controllers
         }
 
         // DELETE api/<MaterialPedidoController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPost]
+        [Route("DeleteMaterialPedido")]
+        public int Delete([FromBody] DeleteMaterialPedido value)
         {
+            return materialInsumo.deleteMaterialPedido(value);
         }
     }
 }
